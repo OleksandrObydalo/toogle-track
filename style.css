@@ -130,6 +130,60 @@ header {
     width: 100%;
 }
 
+.user-section {
+    position: relative;
+}
+
+.current-user {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: var(--main-bg);
+    border-radius: 4px;
+}
+
+.current-user i {
+    font-size: 24px;
+    color: #666;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 250px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-top: 8px;
+    z-index: 10;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.user-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-item:hover {
+    background-color: var(--main-bg);
+}
+
+.user-item small {
+    color: #666;
+    font-size: 12px;
+}
+
 .user i {
     font-size: 24px;
     color: #666;
@@ -163,36 +217,48 @@ header {
     padding: 8px 0;
 }
 
-.project-selector {
+.project-selector, .project-select {
     position: relative;
-    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
     background-color: var(--main-bg);
-    border-radius: 4px;
-    margin-left: 12px;
+    border-radius: 6px;
     cursor: pointer;
-    min-width: 120px;
-    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.project-selector:hover, .project-select:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .project-placeholder {
     color: var(--primary-color);
+    font-weight: 500;
 }
 
-.project-dropdown {
+.project-dropdown, .project-dropdown-modal {
     position: absolute;
     top: 100%;
+    left: 0;
     right: 0;
-    width: 160px;
     background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    border-radius: 6px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
     margin-top: 8px;
-    z-index: 10;
+    z-index: 20;
+    overflow: hidden;
 }
 
 .project-item {
-    padding: 10px 12px;
-    transition: background-color 0.2s;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
 }
 
 .project-item:hover {
@@ -391,48 +457,54 @@ header {
     color: #666;
 }
 
-.form-group input[type="text"] {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-.project-select {
-    position: relative;
-    padding: 10px;
-    background-color: var(--main-bg);
-    border-radius: 4px;
-    cursor: pointer;
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(229, 124, 216, 0.1);
+}
+
+.form-group input[type="color"] {
     width: 100%;
-}
-
-.project-dropdown-modal {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    margin-top: 8px;
-    z-index: 10;
+    height: 50px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .time-input .time-fields {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
 }
 
 .time-fields input {
     width: 70px;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 6px;
     text-align: center;
     font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.time-fields input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(229, 124, 216, 0.1);
 }
 
 .modal-footer {

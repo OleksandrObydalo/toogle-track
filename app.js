@@ -218,13 +218,28 @@ createApp({
             }
         };
 
-        // Close project dropdown in modal when clicking outside
+        const currentUser = ref(null);
+        const showUserDropdown = ref(false);
+
+        const toggleUserDropdown = (event) => {
+            event.stopPropagation();
+            showUserDropdown.value = !showUserDropdown.value;
+        };
+
+        const selectUser = (user) => {
+            currentUser.value = user;
+            showUserDropdown.value = false;
+        };
+
         const handleClickOutside = (event) => {
             if (showProjectDropdown.value) {
                 showProjectDropdown.value = false;
             }
             if (showProjectInModal.value) {
                 showProjectInModal.value = false;
+            }
+            if (showUserDropdown.value) {
+                showUserDropdown.value = false;
             }
         };
 
@@ -271,7 +286,12 @@ createApp({
             closeNewUserModal,
             saveNewUser,
             closeNewProjectModal,
-            saveNewProject
+            saveNewProject,
+            // New user dropdown properties and methods
+            currentUser,
+            showUserDropdown,
+            toggleUserDropdown,
+            selectUser
         };
     }
 }).mount('#app');
