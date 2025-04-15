@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+            }
+        }
+    </script>
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-stopwatch"></i>
+                <span>TimeTracker</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><i class="fas fa-clock"></i> Timer</li>
+                    <li><i class="fas fa-list"></i> Tasks</li>
+                    <li><i class="fas fa-chart-bar"></i> Reports</li>
+                    <li><i class="fas fa-user-friends"></i> Team</li>
+                    <li><i class="fas fa-project-diagram"></i> Projects</li>
+                </ul>
+            </nav>
+            <div class="workspace">
+                <div class="workspace-header">
+                    <i class="fas fa-building"></i>
+                    <span>My Workspace</span>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <header>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </header>
+            <div class="time-tracker">
+                <div class="timer-container">
+                    <div class="timer-input">
+                        <input type="text" placeholder="What are you working on?" v-model="description">
+                        <div class="project-selector" @click="toggleProjectDropdown">
+                            <span v-if="selectedProject">{{ selectedProject }}</span>
+                            <span v-else class="project-placeholder">+ Project</span>
+                            <div class="project-dropdown" v-if="showProjectDropdown">
+                                <div class="project-item" v-for="project in projects" @click="selectProject(project)">
+                                    {{ project }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timer-display">
+                        <span>{{ formatTime(elapsedTime) }}</span>
+                        <button @click="toggleTimer" :class="{ 'active': isTimerRunning }">
+                            <i class="fas" :class="isTimerRunning ? 'fa-stop' : 'fa-play'"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="time-entries">
+                    <h2>Today</h2>
+                    <div class="entry" v-for="(entry, index) in timeEntries" :key="index">
+                        <div class="entry-details">
+                            <div class="entry-description">{{ entry.description }}</div>
+                            <div class="entry-project" v-if="entry.project">{{ entry.project }}</div>
+                        </div>
+                        <div class="entry-time">
+                            <span>{{ formatTime(entry.duration) }}</span>
+                            <div class="entry-actions">
+                                <i class="fas fa-play" @click="resumeEntry(index)"></i>
+                                <i class="fas fa-trash" @click="deleteEntry(index)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total-time" v-if="timeEntries.length > 0">
+                        <span>Total: {{ formatTime(totalTime) }}</span>
+                    </div>
+                    <div v-else class="no-entries">
+                        No time entries yet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
