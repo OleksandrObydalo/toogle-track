@@ -70,6 +70,11 @@
                 </div>
                 <div class="time-entries">
                     <h2>Today</h2>
+                    <div class="entry-actions-top">
+                        <button @click="showManualEntryModal = true" class="add-manual-entry">
+                            <i class="fas fa-plus"></i> Add time manually
+                        </button>
+                    </div>
                     <div class="entry" v-for="(entry, index) in timeEntries" :key="index">
                         <div class="entry-details">
                             <div class="entry-description">{{ entry.description }}</div>
@@ -91,6 +96,117 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Manual Time Entry Modal -->
+        <div class="modal-overlay" v-if="showManualEntryModal" @click="closeManualEntryModal">
+            <div class="modal-content" @click.stop>
+                <div class="modal-header">
+                    <h3>Add time manually</h3>
+                    <i class="fas fa-times" @click="closeManualEntryModal"></i>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>What have you done?</label>
+                        <input type="text" v-model="manualEntry.description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label>Project</label>
+                        <div class="project-select" @click="toggleProjectInModal">
+                            <span v-if="manualEntry.project">{{ manualEntry.project }}</span>
+                            <span v-else class="project-placeholder">+ Project</span>
+                            <div class="project-dropdown-modal" v-if="showProjectInModal">
+                                <div class="project-item" v-for="project in projects" @click="selectProjectInModal(project)">
+                                    {{ project }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group time-input">
+                        <label>Duration</label>
+                        <div class="time-fields">
+                            <input type="number" v-model="manualEntry.hours" min="0" placeholder="hh"> :
+                            <input type="number" v-model="manualEntry.minutes" min="0" max="59" placeholder="mm"> :
+                            <input type="number" v-model="manualEntry.seconds" min="0" max="59" placeholder="ss">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" @click="closeManualEntryModal">Cancel</button>
+                    <button class="btn-save" @click="saveManualEntry">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New User Modal -->
+        <div class="modal-overlay" v-if="showNewUserModal" @click="closeNewUserModal">
+            <div class="modal-content" @click.stop>
+                <div class="modal-header">
+                    <h3>Add New User</h3>
+                    <i class="fas fa-times" @click="closeNewUserModal"></i>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" v-model="newUser.name" placeholder="Enter user name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" v-model="newUser.email" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select v-model="newUser.role">
+                            <option value="">Select Role</option>
+                            <option value="Member">Member</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Manager">Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" @click="closeNewUserModal">Cancel</button>
+                    <button class="btn-save" @click="saveNewUser">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Project Modal -->
+        <div class="modal-overlay" v-if="showNewProjectModal" @click="closeNewProjectModal">
+            <div class="modal-content" @click.stop>
+                <div class="modal-header">
+                    <h3>Add New Project</h3>
+                    <i class="fas fa-times" @click="closeNewProjectModal"></i>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" v-model="newProject.name" placeholder="Enter project name">
+                    </div>
+                    <div class="form-group">
+                        <label>Client</label>
+                        <input type="text" v-model="newProject.client" placeholder="Enter client name">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" v-model="newProject.color">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" @click="closeNewProjectModal">Cancel</button>
+                    <button class="btn-save" @click="saveNewProject">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add buttons to trigger new user and project modals -->
+        <div class="add-buttons">
+            <button @click="showNewUserModal = true" class="add-btn">
+                <i class="fas fa-user-plus"></i> Add User
+            </button>
+            <button @click="showNewProjectModal = true" class="add-btn">
+                <i class="fas fa-project-diagram"></i> Add Project
+            </button>
         </div>
     </div>
 </body>

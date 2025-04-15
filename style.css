@@ -313,3 +313,198 @@ header {
     color: #666;
 }
 
+.entry-actions-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.add-manual-entry {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.add-manual-entry:hover {
+    background-color: var(--main-bg);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.modal-header i {
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #666;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.project-select {
+    position: relative;
+    padding: 10px;
+    background-color: var(--main-bg);
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.project-dropdown-modal {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-top: 8px;
+    z-index: 10;
+}
+
+.time-input .time-fields {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.time-fields input {
+    width: 70px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    gap: 12px;
+}
+
+.btn-cancel {
+    padding: 10px 16px;
+    border: 1px solid var(--border-color);
+    background: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-save {
+    padding: 10px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background-color: var(--main-bg);
+}
+
+.btn-save:hover {
+    background-color: #d059be;
+}
+
+.add-buttons {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.add-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #d059be;
+}
+
+.add-btn i {
+    margin-right: 8px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+}

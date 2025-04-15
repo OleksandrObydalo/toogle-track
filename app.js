@@ -10,14 +10,53 @@ createApp({
         const startTime = ref(null);
         const timerInterval = ref(null);
         const timeEntries = ref([]);
+        
+        // Manual time entry modal
+        const showManualEntryModal = ref(false);
+        const showProjectInModal = ref(false);
+        const manualEntry = ref({
+            description: '',
+            project: '',
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+        });
 
-        const projects = [
-            'Website Development',
-            'App Design',
-            'Marketing',
-            'Research',
-            'Client Meeting'
-        ];
+        // New state for users and projects management
+        const showNewUserModal = ref(false);
+        const showNewProjectModal = ref(false);
+        const newUser = ref({
+            name: '',
+            email: '',
+            role: ''
+        });
+        const newProject = ref({
+            name: '',
+            client: '',
+            color: '#' + Math.floor(Math.random()*16777215).toString(16)
+        });
+        const users = ref([
+            { name: 'John Doe', email: 'john@example.com', role: 'Member' }
+        ]);
+
+        // Modify existing projects to include more details
+        const projects = ref([
+            { 
+                name: 'Website Development', 
+                client: 'ABC Corp',
+                color: '#e57cd8'
+            },
+            { 
+                name: 'App Design', 
+                client: 'XYZ Inc',
+                color: '#2c1338'
+            },
+            { 
+                name: 'Marketing', 
+                client: 'Marketing Agency',
+                color: '#412a4c'
+            }
+        ]);
 
         const toggleProjectDropdown = (event) => {
             event.stopPropagation();
@@ -25,7 +64,7 @@ createApp({
         };
 
         const selectProject = (project) => {
-            selectedProject.value = project;
+            selectedProject.value = project.name;
             showProjectDropdown.value = false;
         };
 
@@ -91,10 +130,101 @@ createApp({
             return timeEntries.value.reduce((total, entry) => total + entry.duration, 0);
         });
 
-        // Close project dropdown when clicking outside
+        const toggleProjectInModal = (event) => {
+            event.stopPropagation();
+            showProjectInModal.value = !showProjectInModal.value;
+        };
+
+        const selectProjectInModal = (project) => {
+            manualEntry.value.project = project.name;
+            showProjectInModal.value = false;
+        };
+
+        const closeManualEntryModal = () => {
+            showManualEntryModal.value = false;
+            resetManualEntry();
+        };
+
+        const resetManualEntry = () => {
+            manualEntry.value = {
+                description: '',
+                project: '',
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            };
+        };
+
+        const saveManualEntry = () => {
+            if (!manualEntry.value.description) {
+                manualEntry.value.description = 'Untitled';
+            }
+            
+            // Calculate duration in seconds
+            const totalSeconds = 
+                (parseInt(manualEntry.value.hours) || 0) * 3600 + 
+                (parseInt(manualEntry.value.minutes) || 0) * 60 + 
+                (parseInt(manualEntry.value.seconds) || 0);
+            
+            if (totalSeconds > 0) {
+                timeEntries.value.unshift({
+                    description: manualEntry.value.description,
+                    project: manualEntry.value.project,
+                    duration: totalSeconds,
+                    startTime: new Date(new Date().getTime() - (totalSeconds * 1000)),
+                    endTime: new Date()
+                });
+                closeManualEntryModal();
+            }
+        };
+
+        const closeNewUserModal = () => {
+            showNewUserModal.value = false;
+            newUser.value = {
+                name: '',
+                email: '',
+                role: ''
+            };
+        };
+
+        const saveNewUser = () => {
+            if (newUser.value.name && newUser.value.email) {
+                users.value.push({
+                    name: newUser.value.name,
+                    email: newUser.value.email,
+                    role: newUser.value.role || 'Member'
+                });
+                closeNewUserModal();
+            }
+        };
+
+        const closeNewProjectModal = () => {
+            showNewProjectModal.value = false;
+            newProject.value = {
+                name: '',
+                client: '',
+                color: '#' + Math.floor(Math.random()*16777215).toString(16)
+            };
+        };
+
+        const saveNewProject = () => {
+            if (newProject.value.name) {
+                projects.value.push({
+                    name: newProject.value.name,
+                    client: newProject.value.client,
+                    color: newProject.value.color
+                });
+                closeNewProjectModal();
+            }
+        };
+
+        // Close project dropdown in modal when clicking outside
         const handleClickOutside = (event) => {
             if (showProjectDropdown.value) {
                 showProjectDropdown.value = false;
+            }
+            if (showProjectInModal.value) {
+                showProjectInModal.value = false;
             }
         };
 
@@ -123,8 +253,25 @@ createApp({
             formatTime,
             toggleTimer,
             resumeEntry,
-            deleteEntry
+            deleteEntry,
+            // Manual time entry properties and methods
+            showManualEntryModal,
+            manualEntry,
+            showProjectInModal,
+            toggleProjectInModal,
+            selectProjectInModal,
+            closeManualEntryModal,
+            saveManualEntry,
+            // New modal and management related returns
+            showNewUserModal,
+            showNewProjectModal,
+            newUser,
+            newProject,
+            users,
+            closeNewUserModal,
+            saveNewUser,
+            closeNewProjectModal,
+            saveNewProject
         };
     }
 }).mount('#app');
-
