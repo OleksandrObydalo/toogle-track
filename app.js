@@ -243,6 +243,69 @@ createApp({
             }
         };
 
+        const currentTab = ref('Timer');
+        const reportsTimeframe = ref('thisWeek');
+        const reportsView = ref('summary');
+
+        const filteredEntries = computed(() => {
+            const now = new Date();
+            const entries = timeEntries.value;
+
+            switch (reportsTimeframe.value) {
+                case 'thisWeek':
+                    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+                    return entries.filter(entry => new Date(entry.startTime) >= weekStart);
+                case 'lastWeek':
+                    const lastWeekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 7);
+                    const lastWeekEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+                    return entries.filter(entry => {
+                        const entryDate = new Date(entry.startTime);
+                        return entryDate >= lastWeekStart && entryDate < lastWeekEnd;
+                    });
+                case 'thisMonth':
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                    return entries.filter(entry => new Date(entry.startTime) >= monthStart);
+                default:
+                    return entries;
+            }
+        });
+
+        const summaryByDay = computed(() => {
+            const summary = {};
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            filteredEntries.value.forEach(entry => {
+                const day = days[new Date(entry.startTime).getDay()];
+                summary[day] = (summary[day] || 0) + entry.duration;
+            });
+            
+            return summary;
+        });
+
+        const summaryByProject = computed(() => {
+            const summary = {};
+            
+            filteredEntries.value.forEach(entry => {
+                const project = entry.project || 'No Project';
+                summary[project] = (summary[project] || 0) + entry.duration;
+            });
+            
+            return summary;
+        });
+
+        const filteredDetailedEntries = computed(() => {
+            return filteredEntries.value.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+        });
+
+        const calculateBarHeight = (duration) => {
+            const maxDuration = Math.max(...Object.values(summaryByDay.value));
+            return (duration / maxDuration) * 100;
+        };
+
+        const formatDate = (date) => {
+            return new Date(date).toLocaleDateString();
+        };
+
         onMounted(() => {
             document.addEventListener('click', handleClickOutside);
         });
@@ -291,7 +354,16 @@ createApp({
             currentUser,
             showUserDropdown,
             toggleUserDropdown,
-            selectUser
+            selectUser,
+            currentTab,
+            reportsTimeframe,
+            reportsView,
+            filteredEntries,
+            summaryByDay,
+            summaryByProject,
+            filteredDetailedEntries,
+            calculateBarHeight,
+            formatDate
         };
     }
 }).mount('#app');

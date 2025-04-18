@@ -25,7 +25,7 @@
                 <ul>
                     <li class="active"><i class="fas fa-clock"></i> Timer</li>
                     <li><i class="fas fa-list"></i> Tasks</li>
-                    <li><i class="fas fa-chart-bar"></i> Reports</li>
+                    <li @click="currentTab = 'Reports'"><i class="fas fa-chart-bar"></i> Reports</li>
                     <li><i class="fas fa-user-friends"></i> Team</li>
                     <li><i class="fas fa-project-diagram"></i> Projects</li>
                 </ul>
@@ -102,6 +102,89 @@
                     </div>
                     <div v-else class="no-entries">
                         No time entries yet
+                    </div>
+                </div>
+            </div>
+            <div class="reports-section" v-if="currentTab === 'Reports'">
+                <div class="reports-header">
+                    <h1>Reports</h1>
+                    <div class="reports-filters">
+                        <select v-model="reportsTimeframe">
+                            <option value="thisWeek">This Week</option>
+                            <option value="lastWeek">Last Week</option>
+                            <option value="thisMonth">This Month</option>
+                        </select>
+                        <div class="reports-tabs">
+                            <button 
+                                @click="reportsView = 'summary'"
+                                :class="{ active: reportsView === 'summary' }"
+                            >
+                                Summary
+                            </button>
+                            <button 
+                                @click="reportsView = 'detailed'"
+                                :class="{ active: reportsView === 'detailed' }"
+                            >
+                                Detailed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reports-content">
+                    <!-- Summary View -->
+                    <div v-if="reportsView === 'summary'" class="reports-summary">
+                        <div class="summary-graph">
+                            <div class="graph-header">
+                                <h3>Time by Day</h3>
+                            </div>
+                            <div class="time-graph">
+                                <div 
+                                    v-for="(dayTotal, day) in summaryByDay" 
+                                    :key="day" 
+                                    class="day-bar"
+                                    :style="{ height: calculateBarHeight(dayTotal) + '%' }"
+                                    :title="formatTime(dayTotal)"
+                                >
+                                    <span class="day-label">{{ day }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="summary-details">
+                            <div class="summary-section">
+                                <h3>Time by Project</h3>
+                                <div 
+                                    v-for="(total, project) in summaryByProject" 
+                                    :key="project" 
+                                    class="project-summary"
+                                >
+                                    <span>{{ project }}</span>
+                                    <span>{{ formatTime(total) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed View -->
+                    <div v-if="reportsView === 'detailed'" class="reports-detailed">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Project</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="entry in filteredDetailedEntries" :key="entry.id">
+                                    <td>{{ formatDate(entry.startTime) }}</td>
+                                    <td>{{ entry.description }}</td>
+                                    <td>{{ entry.project || 'No Project' }}</td>
+                                    <td>{{ formatTime(entry.duration) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
